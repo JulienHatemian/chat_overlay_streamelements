@@ -1,28 +1,12 @@
 const chat = document.querySelector('#chat');
 
-const debugBox = document.createElement("div");
-debugBox.style.position = "absolute";
-debugBox.style.top = "10px";
-debugBox.style.right = "10px";
-debugBox.style.background = "rgba(0,0,0,0.7)";
-debugBox.style.color = "lime";
-debugBox.style.padding = "10px";
-debugBox.style.fontSize = "12px";
-debugBox.style.maxWidth = "300px";
-debugBox.style.zIndex = "999";
-debugBox.style.fontFamily = "monospace";
-document.body.appendChild(debugBox);
-
 window.addEventListener('onEventReceived', function (obj) {
     console.log("ALERTE :", obj);
     const listener = obj.detail.listener;
     const event = obj.detail.event;
 
     console.log(event)
-    debugBox.innerHTML = `
-        <strong>Listener:</strong> ${listener}<br/>
-        <strong>Event:</strong> ${JSON.stringify(event, null, 2)}
-    `;
+
     if (obj.detail.event.listener === 'widget-button') {
 
         if (obj.detail.event.field === 'testMessage') {

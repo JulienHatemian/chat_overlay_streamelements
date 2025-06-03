@@ -114,6 +114,36 @@ window.addEventListener('onEventReceived', function (obj) {
     };
 
     switch (listener) {
+        case "message":
+            let data = event.data;
+            if (data.text.startsWith("!") && hideCommands === "yes") break;
+            if (ignoredUsers.indexOf(data.nick) !== -1) break;
+
+            let message = attachEmotes(data);
+            let badges = "", badge;
+            if (provider === 'mixer') {
+                data.badges.push({url: data.avatar});
+            }
+            for (let i = 0; i < data.badges.length; i++) {
+                badge = data.badges[i];
+                badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
+            }
+            let username = data.displayName + ":";
+            if (nickColor === "user") {
+                const color = data.displayColor !== "" ? data.displayColor : "#" + (md5(username).slice(26));
+                username = `<span style="color:${color}">${username}</span>`;
+            }
+            else if (nickColor === "custom") {
+                const color = customNickColor;
+                username = `<span style="color:${color}">${username}</span>`;
+            }
+            else if (nickColor === "remove") {
+                username = '';
+            }
+            addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
+            previousSender = data.userId;
+
+            break
         case "follower-latest":
             const followMessage = `<span class="system">✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨</span>`;
 
@@ -141,6 +171,18 @@ window.addEventListener('onEventReceived', function (obj) {
             }
             // const subMessage = `<span class="system">🎉 <b>${subData.displayName}</b> vient de s'abonner pour ${subData.amount} mois ! 🎉</span>`;
             // addMessage(subData, subtext);
+            break;
+        case "delete-message":
+            const msgId = event.msgId;
+            document.querySelectorAll(`#message-${msgId}`).forEach(el => {
+                el.remove();
+            });
+            break;
+        case "delete-messages":
+            const sender = event.userId;
+            document.querySelectorAll(`.message[data-sender="${sender}"]`).forEach(el => {
+                el.remove();
+            });
             break;
         default:
             console.log("Unknown event: ", listener);
@@ -227,43 +269,43 @@ window.addEventListener('onEventReceived', function (obj) {
 
 
 
-    if (obj.detail.listener === "delete-message") {
-        const msgId = obj.detail.event.msgId;
-        $(`[data-msgid=${msgId}]`).remove();
-        return;
-    } else if (obj.detail.listener === "delete-messages") {
-        const sender = obj.detail.event.userId;
-        $(`.message-row[data-sender=${sender}]`).remove();
-        return;
-    }
+    // if (obj.detail.listener === "delete-message") {
+    //     const msgId = obj.detail.event.msgId;
+    //     $(`[data-msgid=${msgId}]`).remove();
+    //     return;
+    // } else if (obj.detail.listener === "delete-messages") {
+    //     const sender = obj.detail.event.userId;
+    //     $(`.message-row[data-sender=${sender}]`).remove();
+    //     return;
+    // }
 
-    if (obj.detail.listener !== "message") return;
-    let data = obj.detail.event.data;
-    if (data.text.startsWith("!") && hideCommands === "yes") return;
-    if (ignoredUsers.indexOf(data.nick) !== -1) return;
-    let message = attachEmotes(data);
-    let badges = "", badge;
-    if (provider === 'mixer') {
-        data.badges.push({url: data.avatar});
-    }
-    for (let i = 0; i < data.badges.length; i++) {
-        badge = data.badges[i];
-        badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
-    }
-    let username = data.displayName + ":";
-    if (nickColor === "user") {
-        const color = data.displayColor !== "" ? data.displayColor : "#" + (md5(username).slice(26));
-        username = `<span style="color:${color}">${username}</span>`;
-    }
-    else if (nickColor === "custom") {
-        const color = customNickColor;
-        username = `<span style="color:${color}">${username}</span>`;
-    }
-    else if (nickColor === "remove") {
-        username = '';
-    }
-    addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
-    previousSender = data.userId;
+    // if (obj.detail.listener !== "message") return;
+    // let data = obj.detail.event.data;
+    // if (data.text.startsWith("!") && hideCommands === "yes") return;
+    // if (ignoredUsers.indexOf(data.nick) !== -1) return;
+    // let message = attachEmotes(data);
+    // let badges = "", badge;
+    // if (provider === 'mixer') {
+    //     data.badges.push({url: data.avatar});
+    // }
+    // for (let i = 0; i < data.badges.length; i++) {
+    //     badge = data.badges[i];
+    //     badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
+    // }
+    // let username = data.displayName + ":";
+    // if (nickColor === "user") {
+    //     const color = data.displayColor !== "" ? data.displayColor : "#" + (md5(username).slice(26));
+    //     username = `<span style="color:${color}">${username}</span>`;
+    // }
+    // else if (nickColor === "custom") {
+    //     const color = customNickColor;
+    //     username = `<span style="color:${color}">${username}</span>`;
+    // }
+    // else if (nickColor === "remove") {
+    //     username = '';
+    // }
+    // addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
+    // previousSender = data.userId;
 });
 
 window.addEventListener('onWidgetLoad', function (obj) {
@@ -364,7 +406,7 @@ function html_encode(e) {
     });
 }
 
-function addMessage(username, badges, message, isAction, uid, msgId) {
+function addMessage(username, badges = '', message, isAction, uid, msgId) {
     totalMessages += 1;
     let actionClass = "";
     if (isAction) {

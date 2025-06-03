@@ -16,14 +16,21 @@ let mergeMessages = false;
 let eventList = [
     { libelle: "message", isActive: true },
     { libelle: "delete-message", isActive: true },
-    { libelle: "delete-messages", isActive: true },,
+    { libelle: "delete-messages", isActive: true },
     { libelle: "follower-latest", isActive: false },
     { libelle: "raid-latest", isActive: false },
     { libelle: "subscriber-latest", isActive: false },
     { libelle: "tip-latest", isActive: false },
     { libelle: "cheer-latest", isActive: false },
     { libelle: "cheer-latest", isActive: false }
-]
+];
+
+// Create a Set with the active events
+let activeEvents = new Set(
+    eventList.filter(event => event.isActive).map(event => event.libelle)
+);
+
+console.log("Active events:", activeEvents);
 
 window.addEventListener('onEventReceived', function (obj) {
     // console.log("ALERTE :", obj);

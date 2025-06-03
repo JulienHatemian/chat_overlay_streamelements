@@ -10,13 +10,27 @@ let hideCommands = "no";
 let ignoredUsers = [];
 let previousSender = "";
 let mergeMessages = false;
+// You can personalize the events you want to show in the chat
+// The events that are not in the list or define as false for isActive will not be displayed in the chat
+let eventList = [
+    { libelle: "message", isActive: true },
+    { libelle: "delete-message", isActive: true },
+    { libelle: "delete-messages", isActive: true },,
+    { libelle: "follower-latest", isActive: false },
+    { libelle: "raid-latest", isActive: false },
+    { libelle: "subscriber-latest", isActive: false },
+    { libelle: "tip-latest", isActive: false },
+    { libelle: "cheer-latest", isActive: false },
+    { libelle: "cheer-latest", isActive: false },
+
+]
 
 window.addEventListener('onEventReceived', function (obj) {
-    console.log("ALERTE :", obj);
+    // console.log("ALERTE :", obj);
     const listener = obj.detail.listener;
     const event = obj.detail.event;
 
-    console.log(event)
+    console.log(event);
 
     if (obj.detail.event.listener === 'widget-button') {
 

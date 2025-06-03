@@ -10,6 +10,7 @@ let hideCommands = "no";
 let ignoredUsers = [];
 let previousSender = "";
 let mergeMessages = false;
+
 // You can personalize the events you want to show in the chat
 // The events that are not in the list or define as false for isActive will not be displayed in the chat
 let eventList = [
@@ -21,8 +22,7 @@ let eventList = [
     { libelle: "subscriber-latest", isActive: false },
     { libelle: "tip-latest", isActive: false },
     { libelle: "cheer-latest", isActive: false },
-    { libelle: "cheer-latest", isActive: false },
-
+    { libelle: "cheer-latest", isActive: false }
 ]
 
 window.addEventListener('onEventReceived', function (obj) {

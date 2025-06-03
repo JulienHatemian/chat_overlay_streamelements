@@ -1,6 +1,5 @@
 const chat = document.querySelector('#chat');
 
-
 let totalMessages = 0, messagesLimit = 0, nickColor = "user", removeSelector, addition, customNickColor, channelName,
     provider;
 let animationIn = 'bounceIn';
@@ -29,8 +28,6 @@ let eventList = [
 let activeEvents = new Set(
     eventList.filter(event => event.isActive).map(event => event.libelle)
 );
-
-console.log("Active events:", activeEvents);
 
 window.addEventListener('onEventReceived', function (obj) {
     // console.log("ALERTE :", obj);
@@ -107,6 +104,47 @@ window.addEventListener('onEventReceived', function (obj) {
         return;
     }
 
+    //Events
+    if(!activeEvents.has(listener)) return;
+    let eventData = {
+        msgId: listener + "-" + Date.now(),
+        userId: event._id,
+        displayName: event.displayName,
+        type: listener.replace("-latest", "")
+    };
+
+    switch (listener) {
+        case "follower-latest":
+            const followMessage = `<span class="system">✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨</span>`;
+
+            // addMessage(followData, followMessage);
+            break;
+        case "raid-latest":
+            Object.assign(eventData, { 
+                viewers: event.amount
+            });
+            const raidMessage = `<span class="system">🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨</span>`;
+            
+            // addMessage(raidData, raidMessage);
+            break;
+        case "subscriber-latest":
+            Object.assign(eventData, {
+                amount: event.amount,
+                gifted: event.gifted
+            });
+            let subtext = "";
+
+            if(event.gifted === true){
+                subtext += `<span class="system">🎉 <b>${eventData.displayName}</b> a reçu ${eventData.amount} abonnement ! 🎉</span>`
+            }else{
+                subtext += `<span class="system">🎉 <b>${eventData.displayName}</b> vient de s'abonner pour ${eventData.amount} mois ! 🎉</span>`
+            }
+            // const subMessage = `<span class="system">🎉 <b>${subData.displayName}</b> vient de s'abonner pour ${subData.amount} mois ! 🎉</span>`;
+            // addMessage(subData, subtext);
+            break;
+        default:
+            console.log("Unknown event: ", listener);
+    }
     // Events
     // switch (obj.detail.listener) {
     //     case "follower-latest":

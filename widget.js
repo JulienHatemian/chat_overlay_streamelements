@@ -69,12 +69,12 @@ window.addEventListener('onEventReceived', function (obj) {
                             badges: [{
                                 type: "moderator",
                                 version: "1",
-                                url: "https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/1",
+                                url: "https://static-cdn.jtvnw.net/badges/v1/3267646d-33f0-4b17-b3df-f923a41db1d0/3",
                                 description: "Moderator"
                             }, {
                                 type: "partner",
                                 version: "1",
-                                url: "https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/1",
+                                url: "https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/3",
                                 description: "Verified"
                             }],
                             channel: 'Meit_Ink',
@@ -421,7 +421,7 @@ function addMessage(username, badges = '', message, isAction, uid, msgId) {
         lastMessage.querySelector('.user-message').appendChild(messageElement);
         return;
     }
-
+    
     const element = $.parseHTML(`
     <div data-sender="${uid}" data-msgid="${msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
         <div class="user-box ${actionClass}">${badges}${username}</div>

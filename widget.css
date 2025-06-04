@@ -3,3 +3,8 @@ body,html{
     padding: 0;
     height: 100%;
 }
+
+.badge{
+    width: 18px;
+    height: auto;
+}

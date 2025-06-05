@@ -143,15 +143,16 @@ window.addEventListener('onEventReceived', function (obj) {
             else if (nickColor === "remove") {
                 username = '';
             }
-            addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
+            // addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
+            addMessage(username, badges, message, data.isAction, data, isEvent);
             previousSender = data.userId;
-
             break
         case "follower-latest":
             isEvent = true;
             const followMessage = `<span class="system">✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨</span>`;
 
             // addMessage(followData, followMessage);
+            addMessage('', '', followMessage, false, eventData, isEvent);
             break;
         case "raid-latest":
             Object.assign(eventData, { 
@@ -276,9 +277,6 @@ window.addEventListener('onWidgetLoad', function (obj) {
 //     `);
 // }
 
-
-
-
 function attachEmotes(message) {
     let text = html_encode(message.text);
     let data = message.emotes;
@@ -333,28 +331,38 @@ function html_encode(e) {
     });
 }
 
-function addMessage(username, badges = '', message, isAction, uid, msgId) {
-// function addMessage(username, badges = '', message, isAction, uid, msgId) {
+function addMessage(username = '', badges = '', message, isAction = '', data, isEvent) {
     totalMessages += 1;
+    let element;
     let actionClass = "";
-    if (isAction) {
-        actionClass = "action";
+
+    if(isEvent) {
+        element = $.parseHTML(/*html*/`
+        <div data-sender="${data.userId}" data-msgid="${data.msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
+            <div class="event-message ${data.type}">${message}</div>
+        </div>`);
+    }else{
+        if (isAction) {
+            actionClass = "action";
+        }
+        if (mergeMessages && previousSender === data.userId) {
+            const lastMessage = document.querySelector('.main-container').lastElementChild;
+            const messageElement = document.createElement('span');
+            messageElement.innerHTML = `&nbsp;${message}`; // Use `messageText` or your actual message content variable here
+            messageElement.dataset.sender = data.userId;
+            messageElement.dataset.msgid = data.msgId;
+            lastMessage.querySelector('.user-message').appendChild(messageElement);
+            return;
+        }
+        
+        element = $.parseHTML(/*html*/`
+        <div data-sender="${data.userId}" data-msgid="${data.msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
+            <div class="user-box ${actionClass}">${badges}${username}</div>
+            <div class="user-message ${actionClass}">${message}</div>
+        </div>`);
+
     }
-    if (mergeMessages && previousSender === uid) {
-        const lastMessage = document.querySelector('.main-container').lastElementChild;
-        const messageElement = document.createElement('span');
-        messageElement.innerHTML = `&nbsp;${message}`; // Use `messageText` or your actual message content variable here
-        messageElement.dataset.sender = uid;
-        messageElement.dataset.msgid = msgId;
-        lastMessage.querySelector('.user-message').appendChild(messageElement);
-        return;
-    }
-    
-    const element = $.parseHTML(/*html*/`
-    <div data-sender="${uid}" data-msgid="${msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
-        <div class="user-box ${actionClass}">${badges}${username}</div>
-        <div class="user-message ${actionClass}">${message}</div>
-    </div>`);
+
     if (addition === "append") {
         if (hideAfter !== 999) {
             $(element).appendTo('.main-container').delay(hideAfter * 1000).queue(function () {

@@ -16,9 +16,9 @@ let eventList = [
     { libelle: "message", isActive: true },
     { libelle: "delete-message", isActive: true },
     { libelle: "delete-messages", isActive: true },
-    { libelle: "follower-latest", isActive: false },
-    { libelle: "raid-latest", isActive: false },
-    { libelle: "subscriber-latest", isActive: false },
+    { libelle: "follower-latest", isActive: true },
+    { libelle: "raid-latest", isActive: true },
+    { libelle: "subscriber-latest", isActive: true },
     { libelle: "tip-latest", isActive: false },
     { libelle: "cheer-latest", isActive: false },
     { libelle: "cheer-latest", isActive: false }
@@ -143,7 +143,6 @@ window.addEventListener('onEventReceived', function (obj) {
             else if (nickColor === "remove") {
                 username = '';
             }
-            // addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
             addMessage(username, badges, message, data.isAction, data, isEvent);
             previousSender = data.userId;
             break
@@ -151,7 +150,6 @@ window.addEventListener('onEventReceived', function (obj) {
             isEvent = true;
             const followMessage = `<span class="system">✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨</span>`;
 
-            // addMessage(followData, followMessage);
             addMessage('', '', followMessage, false, eventData, isEvent);
             break;
         case "raid-latest":
@@ -159,9 +157,7 @@ window.addEventListener('onEventReceived', function (obj) {
                 viewers: event.amount
             });
             isEvent = true;
-            const raidMessage = `<span class="system">🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨</span>`;
-            
-            // addMessage(raidData, raidMessage);
+            const raidMessage = `<span class="system">🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨</span>`;            
             break;
         case "subscriber-latest":
             Object.assign(eventData, {
@@ -176,8 +172,6 @@ window.addEventListener('onEventReceived', function (obj) {
             }else{
                 subtext += `<span class="system">🎉 <b>${eventData.displayName}</b> vient de s'abonner pour ${eventData.amount} mois ! 🎉</span>`
             }
-            // const subMessage = `<span class="system">🎉 <b>${subData.displayName}</b> vient de s'abonner pour ${subData.amount} mois ! 🎉</span>`;
-            // addMessage(subData, subtext);
             break;
         case "delete-message":
             isEvent = false;
@@ -196,44 +190,6 @@ window.addEventListener('onEventReceived', function (obj) {
         default:
             console.log("Unknown event: ", listener);
     }
-
-    // if (obj.detail.listener === "delete-message") {
-    //     const msgId = obj.detail.event.msgId;
-    //     $(`[data-msgid=${msgId}]`).remove();
-    //     return;
-    // } else if (obj.detail.listener === "delete-messages") {
-    //     const sender = obj.detail.event.userId;
-    //     $(`.message-row[data-sender=${sender}]`).remove();
-    //     return;
-    // }
-
-    // if (obj.detail.listener !== "message") return;
-    // let data = obj.detail.event.data;
-    // if (data.text.startsWith("!") && hideCommands === "yes") return;
-    // if (ignoredUsers.indexOf(data.nick) !== -1) return;
-    // let message = attachEmotes(data);
-    // let badges = "", badge;
-    // if (provider === 'mixer') {
-    //     data.badges.push({url: data.avatar});
-    // }
-    // for (let i = 0; i < data.badges.length; i++) {
-    //     badge = data.badges[i];
-    //     badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
-    // }
-    // let username = data.displayName + ":";
-    // if (nickColor === "user") {
-    //     const color = data.displayColor !== "" ? data.displayColor : "#" + (md5(username).slice(26));
-    //     username = `<span style="color:${color}">${username}</span>`;
-    // }
-    // else if (nickColor === "custom") {
-    //     const color = customNickColor;
-    //     username = `<span style="color:${color}">${username}</span>`;
-    // }
-    // else if (nickColor === "remove") {
-    //     username = '';
-    // }
-    // addMessage(username, badges, message, data.isAction, data.userId, data.msgId);
-    // previousSender = data.userId;
 });
 
 window.addEventListener('onWidgetLoad', function (obj) {
@@ -260,22 +216,6 @@ window.addEventListener('onWidgetLoad', function (obj) {
 
     ignoredUsers = fieldData.ignoredUsers.toLowerCase().replace(" ", "").split(",");
 });
-
-// function addMessage(data, messageHTML, badges = "") {
-//     // const isEvent = ["follower", "raid", "suscriber"].includes(data.type);
-
-//     // chat.insertAdjacentHTML('beforeend', /*html*/`
-//     //     <div class="message" id="message-${data.msgId}" data-sender="${data.userId}">
-//     //         ${isEvent ? "" : `<div class="meta">${badges} ${data.displayName}</div>`}
-//     //         <span class="text">${messageHTML}</span>
-//     //     </div>
-//     // `);
-//     chat.insertAdjacentHTML('beforeend', /*html*/`
-//         <div class="message text" id="message-${data.msgId}" data-sender="${data.userId}">
-//             ${messageHTML}
-//         </div>
-//     `);
-// }
 
 function attachEmotes(message) {
     let text = html_encode(message.text);

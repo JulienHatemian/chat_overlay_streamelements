@@ -114,6 +114,7 @@ window.addEventListener('onEventReceived', function (obj) {
         displayName: event.displayName,
         type: listener.replace("-latest", "")
     };
+    let isEvent = false;
 
     switch (listener) {
         case "message":
@@ -147,6 +148,7 @@ window.addEventListener('onEventReceived', function (obj) {
 
             break
         case "follower-latest":
+            isEvent = true;
             const followMessage = `<span class="system">✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨</span>`;
 
             // addMessage(followData, followMessage);
@@ -155,6 +157,7 @@ window.addEventListener('onEventReceived', function (obj) {
             Object.assign(eventData, { 
                 viewers: event.amount
             });
+            isEvent = true;
             const raidMessage = `<span class="system">🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨</span>`;
             
             // addMessage(raidData, raidMessage);
@@ -164,6 +167,7 @@ window.addEventListener('onEventReceived', function (obj) {
                 amount: event.amount,
                 gifted: event.gifted
             });
+            isEvent
             let subtext = "";
 
             if(event.gifted === true){
@@ -175,12 +179,14 @@ window.addEventListener('onEventReceived', function (obj) {
             // addMessage(subData, subtext);
             break;
         case "delete-message":
+            isEvent = false;
             const msgId = event.msgId;
             document.querySelectorAll(`#message-${msgId}`).forEach(el => {
                 el.remove();
             });
             break;
         case "delete-messages":
+            isEvent = false;
             const sender = event.userId;
             document.querySelectorAll(`.message[data-sender="${sender}"]`).forEach(el => {
                 el.remove();
@@ -328,6 +334,7 @@ function html_encode(e) {
 }
 
 function addMessage(username, badges = '', message, isAction, uid, msgId) {
+// function addMessage(username, badges = '', message, isAction, uid, msgId) {
     totalMessages += 1;
     let actionClass = "";
     if (isAction) {

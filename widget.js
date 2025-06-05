@@ -1,4 +1,4 @@
-const chat = document.querySelector('#chat');
+// const chat = document.querySelector('#chat');
 
 let totalMessages = 0, messagesLimit = 0, nickColor = "user", removeSelector, addition, customNickColor, channelName,
     provider;
@@ -34,6 +34,7 @@ window.addEventListener('onEventReceived', function (obj) {
     const listener = obj.detail.listener;
     const event = obj.detail.event;
 
+    console.log(listener);
     console.log(event);
 
     if (obj.detail.event.listener === 'widget-button') {
@@ -106,6 +107,7 @@ window.addEventListener('onEventReceived', function (obj) {
 
     //Events
     if(!activeEvents.has(listener)) return;
+    console.log("Event Data received:", event.data);
     let eventData = {
         msgId: listener + "-" + Date.now(),
         userId: event._id,
@@ -187,87 +189,6 @@ window.addEventListener('onEventReceived', function (obj) {
         default:
             console.log("Unknown event: ", listener);
     }
-    // Events
-    // switch (obj.detail.listener) {
-    //     case "follower-latest":
-    //         const followData = {
-    //             msgId: "follow-" + Date.now(),
-    //             userId: event._id,
-    //             displayName: event.displayName,
-    //             type: "follower"
-    //         }
-
-    //         const followMessage = `<span class="system">✨ Merci pour le follow <b>${followData.displayName}</b> ! ✨</span>`;
-
-    //         addMessage(followData, followMessage);
-    //         break;
-    //     case "raid-latest":
-    //         const raidData = {
-    //             msgId: "raid-" + Date.now(),
-    //             userId: event._id,
-    //             displayName: event.displayName,
-    //             viewers: event.amount,
-    //             type: "raid"
-    //         }
-    //         const raidMessage = `<span class="system">🚨 <b>${raidData.displayName}</b> nous a fait un raid de ${raidData.viewers} viewers ! 🚨</span>`;
-    //         addMessage(raidData, raidMessage);
-    //         break;
-    //     case "subscriber-latest":
-    //         const subData = {
-    //             msgId: "sub-" + Date.now(),
-    //             userId: event._id,
-    //             displayName: event.displayName,
-    //             amount: event.amount,
-    //             type: "subscriber"
-    //         }
-    //         let subtext = "";
-
-    //         if(event.gifted === true){
-    //             subtext += `<span class="system">🎉 <b>${subData.displayName}</b> a reçu ${subData.amount} abonnement ! 🎉</span>`
-    //         }else{
-    //             subtext += `<span class="system">🎉 <b>${subData.displayName}</b> vient de s'abonner pour ${subData.amount} mois ! 🎉</span>`
-    //         }
-    //         // const subMessage = `<span class="system">🎉 <b>${subData.displayName}</b> vient de s'abonner pour ${subData.amount} mois ! 🎉</span>`;
-    //         addMessage(subData, subtext);
-    //         break;
-    //     case "delete-message":
-    //         const msgId = obj.detail.event.msgId;
-    //         document.querySelectorAll(`#message-${msgId}`).forEach(el => {
-    //             el.remove();
-    //         });
-    //         break;
-    //     case "delete-messages":
-    //         const sender = obj.detail.event.userId;
-    //         document.querySelectorAll(`.message[data-sender=${sender}]`).forEach(el => {
-    //             el.remove();
-    //         });
-    //         break;
-    //     case "message":
-    //         let data = obj.detail.event.data;
-    //         // if (data.text.startsWith("!") && hideCommands === "yes") return;
-    //         // if (ignoredUsers.indexOf(data.nick) !== -1) return;
-    //         // let message = attachEmotes(data);
-    //         let badges = "", badge;
-    //         // if (provider === 'mixer') {
-    //         //     data.badges.push({url: data.avatar});
-    //         // }
-    //         // console.log(data);
-    //         for (let i = 0; i < data.badges.length; i++) {
-    //             badge = data.badges[i];
-    //             badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
-    //         }
-
-    //         const message = `<div class="meta">${badges} ${data.displayName}</div><span class="text">${obj.detail.event.renderedText}</span>`;
-    //         // addMessage(data, obj.detail.event.renderedText, badges);
-    //         addMessage(data, message, badges);
-    //         break;
-    //     default:
-    //         console.log("Unknown event: ", obj.detail.listener);
-    //         break;
-    // }
-
-
-
 
     // if (obj.detail.listener === "delete-message") {
     //     const msgId = obj.detail.event.msgId;
@@ -392,7 +313,7 @@ function attachEmotes(message) {
                                 height = `${result[0].coords.height}px`;
                             }
                         }
-                        return `<div class="emote" style="width: ${width}; height:${height}; display: inline-block; background-image: url(${url}); background-position: -${x}px -${y}px;"></div>`;
+                        return /*html*/`<div class="emote" style="width: ${width}; height:${height}; display: inline-block; background-image: url(${url}); background-position: -${x}px -${y}px;"></div>`;
                     }
                 } else return key;
 
@@ -422,7 +343,7 @@ function addMessage(username, badges = '', message, isAction, uid, msgId) {
         return;
     }
     
-    const element = $.parseHTML(`
+    const element = $.parseHTML(/*html*/`
     <div data-sender="${uid}" data-msgid="${msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
         <div class="user-box ${actionClass}">${badges}${username}</div>
         <div class="user-message ${actionClass}">${message}</div>

@@ -164,7 +164,7 @@ window.addEventListener('onEventReceived', function (obj) {
                 amount: event.amount,
                 gifted: event.gifted
             });
-            isEvent
+            isEvent = true;
             let subtext = "";
 
             if(event.gifted === true){

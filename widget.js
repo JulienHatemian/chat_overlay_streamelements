@@ -1,5 +1,3 @@
-// const chat = document.querySelector('#chat');
-
 let totalMessages = 0, messagesLimit = 0, nickColor = "user", removeSelector, addition, customNickColor, channelName,
     provider;
 let animationIn = 'bounceIn';
@@ -31,12 +29,11 @@ let activeEvents = new Set(
 );
 
 window.addEventListener('onEventReceived', function (obj) {
-    // console.log("ALERTE :", obj);
     const listener = obj.detail.listener;
     const event = obj.detail.event;
 
-    console.log(listener);
-    console.log(event);
+    // console.log(listener);
+    // console.log(event);
 
     if (obj.detail.event.listener === 'widget-button') {
 
@@ -108,7 +105,7 @@ window.addEventListener('onEventReceived', function (obj) {
 
     //Events
     if(!activeEvents.has(listener)) return;
-    console.log("Event Data received:", event.data);
+    // console.log("Event Data received:", event.data);
     let eventData = {
         msgId: listener + "-" + Date.now(),
         userId: event._id,
@@ -263,7 +260,6 @@ function attachEmotes(message) {
                         let height = "auto";
 
                         if (provider === "mixer") {
-                            console.log(result[0]);
                             if (result[0].coords.width) {
                                 width = `${result[0].coords.width}px`;
                             }

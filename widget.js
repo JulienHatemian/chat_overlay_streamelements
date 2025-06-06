@@ -201,8 +201,13 @@ window.addEventListener('onEventReceived', function (obj) {
             break;
         case "event":
             if(event.type === "charityCampaignDonation") {
+                Object.assign(eventData, {
+                    amount: event.data.amount,
+                    currency: event.data.currency || '€',
+
+                });
                 isEvent = true;
-                const charityMessage = `❤️ <b>${eventData.displayName}</b> a fait un don de ${event.amount} ${event.currency} pour la campagne de charité ! ❤️`;
+                const charityMessage = `❤️ <b>${event.data.displayName}</b> a fait un don de ${eventData.amount} ${eventData.currency} pour la campagne de charité ! ❤️`;
                 
                 addMessage('', '', charityMessage, false, eventData, isEvent);
             }

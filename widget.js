@@ -199,6 +199,14 @@ window.addEventListener('onEventReceived', function (obj) {
             
             addMessage('', '', tipMessage, false, eventData, isEvent);
             break;
+        case "event":
+            if(event.type === "charityCampaignDonation") {
+                isEvent = true;
+                const charityMessage = `❤️ <b>${eventData.displayName}</b> a fait un don de ${event.amount} ${event.currency} pour la campagne de charité ! ❤️`;
+                
+                addMessage('', '', charityMessage, false, eventData, isEvent);
+            }
+            break;
         case "delete-message":
             isEvent = false;
             const msgId = event.msgId;

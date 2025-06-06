@@ -8,21 +8,5 @@
     <script src="widget.js" defer></script>
 </head>
 <body>
-    <!-- <div id="chat" class="messages">
-        <div class="message"></div>
-    </div> -->
-
-    <script>
-        document.body.addEventListener('click', function() {
-            window.dispatchEvent(new CustomEvent('onEventReceived', {
-                detail: {
-                    event: {
-                        field: 'testMessage',
-                        listener: 'widget-button',
-                    }
-                }
-            }))
-        });
-    </script>
 </body>
 </html>

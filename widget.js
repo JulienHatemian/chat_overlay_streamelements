@@ -194,9 +194,10 @@ window.addEventListener('onEventReceived', function (obj) {
 
             if(sender === undefined || sender === null || sender === "") {
                 deleteElement = `.message-row`;
+            }else {
+                deleteElement = `.message-row[data-sender="${sender}"]`;
             }
-            document.querySelectorAll(`.message-row`).forEach(el => {
-            // document.querySelectorAll(`.message[data-sender="${sender}"]`).forEach(el => {
+            document.querySelectorAll(deleteElement).forEach(el => {
                 el.remove();
             });
             break;

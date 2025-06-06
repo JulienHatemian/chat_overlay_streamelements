@@ -32,8 +32,8 @@ window.addEventListener('onEventReceived', function (obj) {
     const listener = obj.detail.listener;
     const event = obj.detail.event;
 
-    // console.log(listener);
-    // console.log(event);
+    console.log(listener);
+    console.log(event);
 
     if (obj.detail.event.listener === 'widget-button') {
 
@@ -105,7 +105,7 @@ window.addEventListener('onEventReceived', function (obj) {
 
     //Events
     if(!activeEvents.has(listener)) return;
-    // console.log("Event Data received:", event.data);
+    console.log("Event Data received:", event.data);
     let eventData = {
         msgId: listener + "-" + Date.now(),
         userId: event._id,
@@ -164,15 +164,22 @@ window.addEventListener('onEventReceived', function (obj) {
         case "subscriber-latest":
             Object.assign(eventData, {
                 amount: event.amount,
-                gifted: event.gifted
+                gifted: event.gifted,
+                bulkGifted: event.bulkGifted || false,
+                tier: event.tier || undefined
             });
             isEvent = true;
             let subtext = "";
 
             if(event.gifted === true){
-                subtext += `🎉 <b>${eventData.displayName}</b> a reçu ${eventData.amount} abonnement ! 🎉`
+                const tierText = eventData.tier ? ` de tier ${eventData.tier / 1000}` : '';
+                subtext += `🎉 <b>${eventData.displayName}</b> a reçu un abonnement cadeau ${tierText} ! 🎉`;
+            }else if(eventData.bulkGifted === true){
+                subtext += `🎉 <b>${eventData.displayName}</b> a offert ${eventData.amount} abonnement(s) ! 🎉`;
             }else{
-                subtext += `🎉 <b>${eventData.displayName}</b> vient de s'abonner pour ${eventData.amount} mois ! 🎉`
+                const suffix = eventData.amount == 1 ? 'er' : 'ème';
+                // subtext += `🎉 <b>${eventData.displayName}</b> s'est abonné(e) pour le ${eventData.amount}${suffix} mois ! 🎉`;
+                subtext += `🎉 <b>${eventData.displayName}</b> s'est abonné(e) ! 🎉`;
             }
 
             addMessage('', '', subtext, false, eventData, isEvent);

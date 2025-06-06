@@ -32,11 +32,9 @@ window.addEventListener('onEventReceived', function (obj) {
     const listener = obj.detail.listener;
     const event = obj.detail.event;
 
-    console.log(listener);
-    console.log(event);
-
+    // If the event is a widget button click, we can emulate a message event
+    // This is useful for testing purposes, you can remove this part if you don't need it
     if (obj.detail.event.listener === 'widget-button') {
-
         if (obj.detail.event.field === 'testMessage') {
             let emulated = new CustomEvent("onEventReceived", {
                 detail: {
@@ -103,9 +101,10 @@ window.addEventListener('onEventReceived', function (obj) {
         return;
     }
 
-    //Events
+    //EVENTS
+    // If the listener is not in the active events, we can ignore it
     if(!activeEvents.has(listener)) return;
-    console.log("Event Data received:", event.data);
+    // Get all important data from the event to define the message
     let eventData = {
         msgId: listener + "-" + Date.now(),
         userId: event._id,
@@ -114,6 +113,10 @@ window.addEventListener('onEventReceived', function (obj) {
     };
     let isEvent = false;
 
+    // The switch case is used to define the type of event and add the necessary data
+    //You can add more cases if you want to support more events
+    //If you want to remove an event, just remove the case or change the isActive property to false in the eventList
+    //You can also personalize the event messages displayed in the chat by changing the message variable
     switch (listener) {
         case "message":
             let data = event.data;
@@ -148,7 +151,7 @@ window.addEventListener('onEventReceived', function (obj) {
             break
         case "follower-latest":
             isEvent = true;
-            const followMessage = `✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨`;
+            const followMessage = `✨ <b>${eventData.displayName}</b> vient de follow ! ✨`;
 
             addMessage('', '', followMessage, false, eventData, isEvent);
             break;
@@ -200,6 +203,8 @@ window.addEventListener('onEventReceived', function (obj) {
             addMessage('', '', tipMessage, false, eventData, isEvent);
             break;
         case "event":
+            // This event is used to display custom events, like charity campaigns or other custom events
+            let eventMessage = '';
             if(event.type === "charityCampaignDonation") {
                 Object.assign(eventData, {
                     amount: event.data.amount,
@@ -207,20 +212,21 @@ window.addEventListener('onEventReceived', function (obj) {
 
                 });
                 isEvent = true;
-                const charityMessage = `❤️ <b>${event.data.displayName}</b> a fait un don de ${eventData.amount} ${eventData.currency} pour la campagne de charité ! ❤️`;
+                eventMessage = `❤️ <b>${event.data.displayName}</b> a fait un don de ${eventData.amount} ${eventData.currency} pour la campagne de charité ! ❤️`;
                 
-                addMessage('', '', charityMessage, false, eventData, isEvent);
+                addMessage('', '', eventMessage, false, eventData, isEvent);
             }
             break;
         case "delete-message":
-            isEvent = false;
+            // This event is used to delete a specific message by its msgId
             const msgId = event.msgId;
             document.querySelectorAll(`#message-${msgId}`).forEach(el => {
                 el.remove();
             });
             break;
         case "delete-messages":
-            isEvent = false;
+            // This event is used to delete all messages from a specific user or all messages in the chat
+            // If the userId is not defined, it will delete all messages in the chat
             const sender = event.userId;
             let deleteElement = ""
 
@@ -316,6 +322,7 @@ function html_encode(e) {
     });
 }
 
+// This function is used to add a message or an event to the chat
 function addMessage(username = '', badges = '', message, isAction = '', data, isEvent) {
     totalMessages += 1;
     let element;

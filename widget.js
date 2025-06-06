@@ -190,7 +190,13 @@ window.addEventListener('onEventReceived', function (obj) {
         case "delete-messages":
             isEvent = false;
             const sender = event.userId;
-            document.querySelectorAll(`.message[data-sender="${sender}"]`).forEach(el => {
+            let deleteElement = ""
+
+            if(sender === undefined || sender === null || sender === "") {
+                deleteElement = `.message-row`;
+            }
+            document.querySelectorAll(`.message-row`).forEach(el => {
+            // document.querySelectorAll(`.message[data-sender="${sender}"]`).forEach(el => {
                 el.remove();
             });
             break;

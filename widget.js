@@ -20,7 +20,7 @@ let eventList = [
     { libelle: "subscriber-latest", isActive: true },
     { libelle: "tip-latest", isActive: true },
     { libelle: "cheer-latest", isActive: true },
-    // { libelle: "cheer-latest", isActive: true }
+    { libelle: "event", isActive: true }
 ];
 
 // Create a Set with the active events

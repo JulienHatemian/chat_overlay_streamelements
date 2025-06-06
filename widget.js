@@ -18,9 +18,9 @@ let eventList = [
     { libelle: "follower-latest", isActive: true },
     { libelle: "raid-latest", isActive: true },
     { libelle: "subscriber-latest", isActive: true },
-    { libelle: "tip-latest", isActive: false },
-    { libelle: "cheer-latest", isActive: false },
-    { libelle: "cheer-latest", isActive: false }
+    { libelle: "tip-latest", isActive: true },
+    { libelle: "cheer-latest", isActive: true },
+    // { libelle: "cheer-latest", isActive: true }
 ];
 
 // Create a Set with the active events
@@ -157,7 +157,7 @@ window.addEventListener('onEventReceived', function (obj) {
                 viewers: event.amount
             });
             isEvent = true;
-            const raidMessage = `🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨`;            
+            const raidMessage = `🚨 <b>${eventData.displayName}</b> arrive avec un raid de ${eventData.viewers} viewers ! 🚨`;            
             
             addMessage('', '', raidMessage, false, eventData, isEvent);
             break;
@@ -166,19 +166,15 @@ window.addEventListener('onEventReceived', function (obj) {
                 amount: event.amount,
                 gifted: event.gifted,
                 bulkGifted: event.bulkGifted || false,
-                tier: event.tier || undefined
             });
             isEvent = true;
             let subtext = "";
 
             if(event.gifted === true){
-                const tierText = eventData.tier ? ` de tier ${eventData.tier / 1000}` : '';
-                subtext += `🎉 <b>${eventData.displayName}</b> a reçu un abonnement cadeau ${tierText} ! 🎉`;
+                subtext += `🎉 <b>${eventData.displayName}</b> a reçu un abonnement cadeau ! 🎉`;
             }else if(eventData.bulkGifted === true){
                 subtext += `🎉 <b>${eventData.displayName}</b> a offert ${eventData.amount} abonnement(s) ! 🎉`;
             }else{
-                const suffix = eventData.amount == 1 ? 'er' : 'ème';
-                // subtext += `🎉 <b>${eventData.displayName}</b> s'est abonné(e) pour le ${eventData.amount}${suffix} mois ! 🎉`;
                 subtext += `🎉 <b>${eventData.displayName}</b> s'est abonné(e) ! 🎉`;
             }
 

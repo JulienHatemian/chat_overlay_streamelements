@@ -9,6 +9,7 @@ let hideCommands = "no";
 let ignoredUsers = [];
 let previousSender = "";
 let mergeMessages = false;
+let visibleBadges = true;
 
 // You can personalize the events you want to show in the chat
 // The events that are not in the list or define as false for isActive will not be displayed in the chat
@@ -124,12 +125,14 @@ window.addEventListener('onEventReceived', function (obj) {
 
             let message = attachEmotes(data);
             let badges = "", badge;
-            if (provider === 'mixer') {
-                data.badges.push({url: data.avatar});
-            }
-            for (let i = 0; i < data.badges.length; i++) {
-                badge = data.badges[i];
-                badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
+            if(visibleBadges === true){
+                if (provider === 'mixer') {
+                    data.badges.push({url: data.avatar});
+                }
+                for (let i = 0; i < data.badges.length; i++) {
+                    badge = data.badges[i];
+                    badges += `<img alt="" src="${badge.url}" class="badge ${badge.type}-icon"> `;
+                }
             }
             let username = data.displayName + ":";
             if (nickColor === "user") {
@@ -148,7 +151,7 @@ window.addEventListener('onEventReceived', function (obj) {
             break
         case "follower-latest":
             isEvent = true;
-            const followMessage = `<span class="system">✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨</span>`;
+            const followMessage = `✨ Merci pour le follow <b>${eventData.displayName}</b> ! ✨`;
 
             addMessage('', '', followMessage, false, eventData, isEvent);
             break;
@@ -157,7 +160,7 @@ window.addEventListener('onEventReceived', function (obj) {
                 viewers: event.amount
             });
             isEvent = true;
-            const raidMessage = `<span class="system">🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨</span>`;            
+            const raidMessage = `🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨`;            
             break;
         case "subscriber-latest":
             Object.assign(eventData, {
@@ -168,9 +171,9 @@ window.addEventListener('onEventReceived', function (obj) {
             let subtext = "";
 
             if(event.gifted === true){
-                subtext += `<span class="system">🎉 <b>${eventData.displayName}</b> a reçu ${eventData.amount} abonnement ! 🎉</span>`
+                subtext += `🎉 <b>${eventData.displayName}</b> a reçu ${eventData.amount} abonnement ! 🎉`
             }else{
-                subtext += `<span class="system">🎉 <b>${eventData.displayName}</b> vient de s'abonner pour ${eventData.amount} mois ! 🎉</span>`
+                subtext += `🎉 <b>${eventData.displayName}</b> vient de s'abonner pour ${eventData.amount} mois ! 🎉`
             }
             break;
         case "delete-message":
@@ -294,13 +297,12 @@ function addMessage(username = '', badges = '', message, isAction = '', data, is
             lastMessage.querySelector('.user-message').appendChild(messageElement);
             return;
         }
-        
+
         element = $.parseHTML(/*html*/`
-        <div data-sender="${data.userId}" data-msgid="${data.msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
+        <div data-sender="${data.userId}" data-msgid="${data.msgId}" class="message-row {animationIn} animated ${data.badges[0].type === "broadcaster" ? "broadcaster" : data.badges[0].type === "moderator" ? "moderator" : "viewer"}" id="msg-${totalMessages}">
             <div class="user-box ${actionClass}">${badges}${username}</div>
             <div class="user-message ${actionClass}">${message}</div>
         </div>`);
-
     }
 
     if (addition === "append") {

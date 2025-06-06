@@ -8,3 +8,15 @@ body,html{
     width: 18px;
     height: auto;
 }
+
+.broadcaster{
+    background-color: red;
+}
+
+.viewer{
+    background-color: aqua;
+}
+
+.moderator{
+    background-color: green;
+}

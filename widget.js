@@ -59,9 +59,9 @@ window.addEventListener('onEventReceived', function (obj) {
                                 "user-id": "100135110",
                                 "user-type": "mod"
                             },
-                            nick: 'Meit_Ink',
+                            nick: 'bob',
                             userId: "100135110",
-                            displayName: 'Meit_Ink',
+                            displayName: 'Bob',
                             displayColor: "#5B99FF",
                             badges: [{
                                 type: "moderator",
@@ -74,8 +74,8 @@ window.addEventListener('onEventReceived', function (obj) {
                                 url: "https://static-cdn.jtvnw.net/badges/v1/d12a2e27-16f6-41d0-ab77-b780518f00a3/3",
                                 description: "Verified"
                             }],
-                            channel: 'Meit_Ink',
-                            text: "Howdy! My name is Meit_Ink and I am here to serve Kappa",
+                            channel: 'Bob',
+                            text: "Howdy! My name is Bob and I am here to serve Kappa",
                             isAction: !1,
                             emotes: [{
                                 type: "twitch",
@@ -92,7 +92,7 @@ window.addEventListener('onEventReceived', function (obj) {
                             }],
                             msgId: "43285909-412c-4eee-b80d-89f72ba53142"
                         },
-                        renderedText: 'Howdy! My name is Meit_Ink and I am here to serve <img src="https://static-cdn.jtvnw.net/emoticons/v1/25/1.0" srcset="https://static-cdn.jtvnw.net/emoticons/v1/25/1.0 1x, https://static-cdn.jtvnw.net/emoticons/v1/25/1.0 2x, https://static-cdn.jtvnw.net/emoticons/v1/25/3.0 4x" title="Kappa" class="emote">'
+                        renderedText: 'Howdy! My name is Bob and I am here to serve <img src="https://static-cdn.jtvnw.net/emoticons/v1/25/1.0" srcset="https://static-cdn.jtvnw.net/emoticons/v1/25/1.0 1x, https://static-cdn.jtvnw.net/emoticons/v1/25/1.0 2x, https://static-cdn.jtvnw.net/emoticons/v1/25/3.0 4x" title="Kappa" class="emote">'
                     }
                 }
             });

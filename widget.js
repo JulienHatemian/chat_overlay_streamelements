@@ -180,6 +180,15 @@ window.addEventListener('onEventReceived', function (obj) {
 
             addMessage('', '', subtext, false, eventData, isEvent);
             break;
+        case "cheer-latest":
+            Object.assign(eventData, {
+                amount: event.amount,
+            });
+            isEvent = true;
+            const cheerMessage = `💰 <b>${eventData.displayName}</b> a donné ${eventData.amount} bits ! 💰`;
+            
+            addMessage('', '', cheerMessage, false, eventData, isEvent);
+            break;
         case "delete-message":
             isEvent = false;
             const msgId = event.msgId;

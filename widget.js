@@ -161,6 +161,8 @@ window.addEventListener('onEventReceived', function (obj) {
             });
             isEvent = true;
             const raidMessage = `🚨 <b>${eventData.displayName}</b> nous a fait un raid de ${eventData.viewers} viewers ! 🚨`;            
+            
+            addMessage('', '', raidMessage, false, eventData, isEvent);
             break;
         case "subscriber-latest":
             Object.assign(eventData, {
@@ -175,6 +177,8 @@ window.addEventListener('onEventReceived', function (obj) {
             }else{
                 subtext += `🎉 <b>${eventData.displayName}</b> vient de s'abonner pour ${eventData.amount} mois ! 🎉`
             }
+
+            addMessage('', '', subtext, false, eventData, isEvent);
             break;
         case "delete-message":
             isEvent = false;

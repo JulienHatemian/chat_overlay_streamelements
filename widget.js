@@ -189,6 +189,16 @@ window.addEventListener('onEventReceived', function (obj) {
             
             addMessage('', '', cheerMessage, false, eventData, isEvent);
             break;
+        case "tip-latest":
+            Object.assign(eventData, {
+                amount: event.amount,
+                currency: event.currency || '€',
+            });
+            isEvent = true;
+            const tipMessage = `💵 <b>${eventData.displayName}</b> a donné ${eventData.amount} ${eventData.currency} ! 💵`;
+            
+            addMessage('', '', tipMessage, false, eventData, isEvent);
+            break;
         case "delete-message":
             isEvent = false;
             const msgId = event.msgId;

@@ -330,7 +330,7 @@ function addMessage(username = '', badges = '', message, isAction = '', data, is
 
     if(isEvent) {
         element = $.parseHTML(/*html*/`
-        <div data-sender="${data.userId}" data-msgid="${data.msgId}" class="message-row {animationIn} animated" id="msg-${totalMessages}">
+        <div data-sender="${data.userId}" data-msgid="${data.msgId}" class="event message-row {animationIn} animated" id="msg-${totalMessages}">
             <div class="event-message ${data.type}">${message}</div>
         </div>`);
     }else{
